@@ -31,6 +31,12 @@ function getIntensity(){
     nmcli -t device wifi list | awk '{n=split($0, array, ":"); print array[n-1]}'
 }
 
+function formatUpDown(){
+    down=$(ifstat -i $device 1 1 | awk 'NR%3==0 {print $1}')
+    up=$(ifstat -i $device 1 1 | awk 'NR%3==0 {print $2}')
+    echo ↑$up ↓$down
+}
+
 status=$(getStatus)
 
 if [[ $status == *"connecting"* ]]
@@ -38,7 +44,12 @@ then
     echo ! ---- $device Connecting...
 elif [[ $status == "connected" ]]
 then
-    echo $(getIntensity) $(getSSID)  ↑↓ $(getIpAddress)
+    if [[ $(command -v ifstat) > 0 ]] 
+    then
+        echo $(getIntensity) $(formatUpDown) $(getSSID) - $(getIpAddress)
+    else
+        echo $(getIntensity) $(getSSID)  ↑↓ $(getIpAddress)
+    fi
 else
     echo ! ---- $device Offline
 fi

@@ -4,6 +4,11 @@ Pure bash script to generate connection format. Used for polybar.
 
 Install it into your PATH, or call it directly.
 
+## Requirements
+
+- nmcli
+- ifstat -> `sudo apt install ifstat` [optional]
+
 ## Usage
 ```bash
 nm_poly_widget.sh your_device
@@ -17,4 +22,9 @@ The current polybar implementation doesn't uses wireless-tools for it's wireless
 
 ## Screnshot
 
+without `ifstat`
+
 ![ss](screenshot.png)
+
+using `ifstat`
+![using ifstat](using_ifstat.png)
