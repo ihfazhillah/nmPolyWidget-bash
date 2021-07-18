@@ -27,4 +27,5 @@ without `ifstat`
 ![ss](screenshot.png)
 
 using `ifstat`
+
 ![using ifstat](using_ifstat.png)
