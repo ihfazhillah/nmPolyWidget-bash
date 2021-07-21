@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ -z $1 ]
+if [ -z "$1" ]
 then
-    echo usage: $0 YOUR_DEVICE
+    echo usage: "$0" YOUR_DEVICE
     exit 1
 fi
 
@@ -12,7 +12,7 @@ DEVICE_STATUS="nmcli -t device status"
 FILTER_BY_DEVICE="grep $device"
 
 function getIpAddress(){
-    nmcli -t device show $device | grep -i IP4.ADDRESS | awk '{split($0, array, /[:\/]/); print array[2]}' 
+    nmcli -t device show "$device" | grep -i IP4.ADDRESS | awk '{split($0, array, /[:\/]/); print array[2]}' 
 }
 
 function getSSID(){
@@ -32,24 +32,24 @@ function getIntensity(){
 }
 
 function formatUpDown(){
-    down=$(ifstat -i $device 1 1 | awk 'NR%3==0 {print $1}')
-    up=$(ifstat -i $device 1 1 | awk 'NR%3==0 {print $2}')
-    echo ↑$up ↓$down
+    down=$(ifstat -i "$device" 1 1 | awk 'NR%3==0 {print $1}')
+    up=$(ifstat -i "$device" 1 1 | awk 'NR%3==0 {print $2}')
+    echo ↑"$up" ↓"$down"
 }
 
 status=$(getStatus)
 
 if [[ $status == *"connecting"* ]]
 then
-    echo ! ---- $device Connecting...
+    echo ! ---- "$device" Connecting...
 elif [[ $status == "connected" ]]
 then
-    if [[ $(command -v ifstat) > 0 ]] 
+    if [[ $(command -v ifstat 2> /dev/null | wc -l) -gt 0 ]] 
     then
-        echo $(getIntensity) $(formatUpDown) $(getSSID) - $(getIpAddress)
+        echo "$(getIntensity) $(formatUpDown) $(getSSID) - $(getIpAddress)"
     else
-        echo $(getIntensity) $(getSSID)  ↑↓ $(getIpAddress)
+        echo "$(getIntensity) $(getSSID)  ↑↓ $(getIpAddress)"
     fi
 else
-    echo ! ---- $device Offline
+    echo ! ---- "$device" Offline
 fi
